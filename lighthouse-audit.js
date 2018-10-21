@@ -5,7 +5,8 @@ const CI = new LighthouseCI(process.env.GITHUB_TOKEN);
 
 const pathToReport = 'report.json';
 const allowedTypes = ['performance', 'pwa', 'seo', 'accessibility', 'best-practices'];
-const enableComment = process.env.ENABLE_LIGHTHOUSE_COMMENT
+const enableComment = process.env.ENABLE_LIGHTHOUSE_COMMENT;
+const enableQualityGateLink = process.env.ENABLE_LIGHTHOUSE_QG_LINK;
 
 const GITHUB_PENDING_STATUS = {
   state: 'pending',
@@ -41,6 +42,11 @@ function getConfig() {
 
   if (enableComment === 'true') {
     config.addComment = true;
+  }
+
+  // FLYTTA UT I ENV VAR/CONFA PÅ NÅGOT SÄTT, GÅR DET ATT EXTRAHERA FRÅN "TRAVIS_COMMIt"?
+  if (enableQualityGateLink === 'true') {
+    config.qualityGateUrl = `https://quality-gate.schibsted.io/#/${process.env.TRAVIS_PULL_REQUEST_SLUG}/${process.env.TRAVIS_BUILD_ID}/reports/11`
   }
 
   // DESSA SÄTTS AUTOMATISKT AV TRAVIS - FEJKA DETTA FÖR ATT SE ATT DET FUNKAR! (ALT PROVA I robborow/lh)
