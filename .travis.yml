@@ -6,6 +6,6 @@ node_js:
 services:
   - docker
 before_script:
-  - chmod +x build.sh
+  - chmod +x lh.sh
 script: 
   - ./lh.sh
