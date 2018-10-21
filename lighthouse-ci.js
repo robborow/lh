@@ -119,8 +119,8 @@ class LighthouseCI {
     let rows = '';
     Object.values(lhr.categories).forEach(cat => {
       const threshold = thresholds[cat.id] || '-';
-      if (threshold !== '-') {
-        threshold = (cat.score * 100) < threshold ? `:no_entry: ${threshold}` : `:white_check_mark: ${threshold}`
+      if (threshold != '-') {
+        threshold = cat.score * 100 < threshold ? `:no_entry: ${threshold}` : `:white_check_mark: ${threshold}`
       }
       rows += `| ${cat.title} | ${cat.score * 100} | ${threshold} \n`;
     });
