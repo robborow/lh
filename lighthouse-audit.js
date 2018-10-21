@@ -133,9 +133,11 @@ async function lighthouseToGithub() {
   // Post comment on issue with updated LH scores.
   if (config.addComment) {
     try {
-      await CI.postLighthouseComment(prInfo, lhr, config.thresholds, config.qualityGateUrl ? config.qualityGateUrl : null);
+      let qgUrl = config.qualityGateUrl ? config.qualityGateUrl : null;
+      await CI.postLighthouseComment(prInfo, lhr, config.thresholds, qgUrl);
     } catch (err) {
-      res.json('Error posting Lighthouse comment to PR.');
+      console.log('Error posting Lighthouse comment to PR.');
+      console.error(err);
     }
   }
 
