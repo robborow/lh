@@ -5,6 +5,7 @@ const CI = new LighthouseCI(process.env.GITHUB_TOKEN);
 
 const pathToReport = 'report.json';
 const allowedTypes = ['performance', 'pwa', 'seo', 'accessibility', 'best-practices'];
+const enableComment = process.env.ENABLED_LIGHTHOUSE_COMMENT
 
 const GITHUB_PENDING_STATUS = {
   state: 'pending',
@@ -36,6 +37,10 @@ function getConfig() {
     if (allowedTypes.indexOf(type) > -1) {
       config.thresholds[type] = value
     }
+  }
+
+  if (enableComment === 'true') {
+    config.addComment = true;
   }
 
   // DESSA SÄTTS AUTOMATISKT AV TRAVIS - FEJKA DETTA FÖR ATT SE ATT DET FUNKAR! (ALT PROVA I robborow/lh)
