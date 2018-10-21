@@ -118,7 +118,7 @@ class LighthouseCI {
   postLighthouseComment(prInfo, lhr, thresholds, reportUrl) {
     let rows = '';
     Object.values(lhr.categories).forEach(cat => {
-      const threshold = thresholds[cat.id] || '-';
+      let threshold = thresholds[cat.id] || '-';
       if (threshold != '-') {
         threshold = cat.score * 100 < threshold ? `:no_entry: ${threshold}` : `:white_check_mark: ${threshold}`
       }
