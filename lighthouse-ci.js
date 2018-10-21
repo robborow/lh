@@ -23,13 +23,12 @@ const fetch = require('node-fetch'); // polyfill
 const Github = require('@octokit/rest');
 const URL = require('url').URL;
 const URLSearchParams = require('url').URLSearchParams;
-const token = process.env.GITHUB_TOKEN;
 
 class LighthouseCI {
   /**
    * @param {!string} token Github OAuth token that has repo:status access.
    */
-  constructor() {
+  constructor(token) {
     this.github = new Github({
       debug: true
     });

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const util = require('util');
 const LighthouseCI = require('./lighthouse-ci');
+const CI = new LighthouseCI(process.env.GITHUB_TOKEN);
 
 const pathToReport = 'report.json';
 const allowedTypes = ['performance', 'pwa', 'seo', 'accessibility', 'best-practices'];
