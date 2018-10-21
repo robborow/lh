@@ -96,9 +96,7 @@ async function lighthouseToGithub() {
   // //   return; // Treat a LH error as fatal. Do not proceed.
   // // }
 
-  // try {
-
-  //   // HANTERA DETTA PÅ NÅTT BRA SÄTT (passa in variabler till 'npm run lighthouse-audit'?)
+  try {
     // Assign pass/fail to PR if a min score is provided.
     if (Object.keys(config.thresholds).length) {
       await CI.assignPassFailToPR(lhr, config.thresholds, prInfo);
