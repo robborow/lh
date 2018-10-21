@@ -5,7 +5,7 @@ const CI = new LighthouseCI(process.env.GITHUB_TOKEN);
 
 const pathToReport = 'report.json';
 const allowedTypes = ['performance', 'pwa', 'seo', 'accessibility', 'best-practices'];
-const enableComment = process.env.ENABLED_LIGHTHOUSE_COMMENT
+const enableComment = process.env.ENABLE_LIGHTHOUSE_COMMENT
 
 const GITHUB_PENDING_STATUS = {
   state: 'pending',
@@ -104,7 +104,8 @@ async function lighthouseToGithub() {
   try {
     // Assign pass/fail to PR if a min score is provided.
     if (Object.keys(config.thresholds).length) {
-      await CI.assignPassFailToPR(lhr, config.thresholds, prInfo);
+      let opts = config.qualityGateUrl ? Object.assign({ target_url: config.qualityGateUrl }, prInfo) : prInfo
+      await CI.assignPassFailToPR(lhr, config.thresholds, opts);
     } else {
       await CI.updateGithubStatus(Object.assign({
         description: 'Auditing complete. See scores above.',
