@@ -1,0 +1,23 @@
+{
+  "name": "lh-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lighthouse-audit": "node ./lighthouse-audit.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robborow/lh.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robborow/lh/issues"
+  },
+  "homepage": "https://github.com/robborow/lh#readme",
+  "dependencies": {
+    "@octokit/rest": "^15.15.1"
+  }
+}
