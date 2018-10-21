@@ -69,8 +69,15 @@ function getConfig() {
 }
 
 async function lighthouseToGithub() {
-  let report = await readFile(pathToReport, 'utf8');
-  let lhr = JSON.parse(report);
+  let report, lhr;
+  try {
+    report = await readFile(pathToReport, 'utf8');
+    lhr = JSON.parse(report);
+  } catch (err) {
+    console.log('Error reading Lighthouse report json file')
+    console.error(err);
+    return
+  }
 
   let config = getConfig();
 
@@ -126,7 +133,7 @@ async function lighthouseToGithub() {
   // Post comment on issue with updated LH scores.
   if (config.addComment) {
     try {
-      await CI.postLighthouseComment(prInfo, lhr, config.thresholds);
+      await CI.postLighthouseComment(prInfo, lhr, config.thresholds, config.qualityGateUrl ? config.qualityGateUrl : null);
     } catch (err) {
       res.json('Error posting Lighthouse comment to PR.');
     }

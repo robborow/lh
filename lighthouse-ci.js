@@ -115,10 +115,13 @@ class LighthouseCI {
    * @param {!Object<string, number>} thresholds Minimum scores per category.
    * @return {!Promise<!Object<string, number>} Lighthouse scores.
    */
-  postLighthouseComment(prInfo, lhr, thresholds) {
+  postLighthouseComment(prInfo, lhr, thresholds, reportUrl) {
     let rows = '';
     Object.values(lhr.categories).forEach(cat => {
       const threshold = thresholds[cat.id] || '-';
+      if (threshold !== '-') {
+        threshold = (cat.score * 100) < threshold ? `:no_entry: ${threshold}` : `:white_check_mark: ${threshold}`
+      }
       rows += `| ${cat.title} | ${cat.score * 100} | ${threshold} \n`;
     });
 
@@ -128,6 +131,8 @@ Updated [Lighthouse](https://developers.google.com/web/tools/lighthouse/) report
 | Category | New score | Required threshold |
 | ------------- | ------------- | ------------- |
 ${rows}
+
+${reportUrl ? `[Read full report](${reportUrl})` : ''}
 
 _Tested with Lighthouse version: ${lhr.lighthouseVersion}_`;
 
