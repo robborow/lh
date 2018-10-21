@@ -3,5 +3,9 @@ set -e # Exit on error
 
 echo "Running lighthouse tests..."
 
-echo "$ARTIFACTORY_PWD" | docker login --username $ARTIFACTORY_USER --password-stdin containers.schibsted.io
-docker run -it --net=host --rm --cap-add=SYS_ADMIN containers.schibsted.io/smp-distribution/lighthouse-ci http://www.google.se --output=json
+echo "$TRAVIS_PULL_REQUEST"
+echo "$TRAVIS_PULL_REQUEST_SHA"
+echo "$TRAVIS_PULL_REQUEST_SLUG"
+
+echo "$DOCKER_PWD" | docker login --username $DOCKER_USER --password-stdin
+docker run -it --net=host --rm --cap-add=SYS_ADMIN docker pull robborow/lighthouse-ci http://www.google.se --output=json
