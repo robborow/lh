@@ -5,5 +5,7 @@ node_js:
   - '8'
 services:
   - docker
+before_script:
+  - chmod +x build.sh
 script: 
   - ./lh.sh
