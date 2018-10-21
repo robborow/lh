@@ -5,6 +5,11 @@ const LighthouseCI = require('./lighthouse-ci');
 const pathToReport = 'report.json';
 const allowedTypes = ['performance', 'pwa', 'seo', 'accessibility', 'best-practices'];
 
+const GITHUB_PENDING_STATUS = {
+  state: 'pending',
+  description: 'Auditing PR changes...'
+};
+
 // Convert fs.readFile into Promise version of same    
 const readFile = util.promisify(fs.readFile);
 
@@ -59,21 +64,23 @@ async function lighthouseToGithub() {
 
   // // denna info kommer från runlighthouse.js i root, hur får jag det här?
   // const config = Object.assign({}, req.body);
-  // const prInfo = {
-  //   repo: config.repo.name,
-  //   owner: config.repo.owner,
-  //   number: config.pr.number,
-  //   sha: config.pr.sha
-  // };
+  const prInfo = {
+    repo: config.repo.name,
+    owner: config.repo.owner,
+    number: config.pr.number,
+    sha: config.pr.sha
+  };
+
+  console.log('prInfo', prInfo)
 
   // // DENNA BORDE EGENTLIGEN KÖRAS I BÖRJAN AV run-lighthouse.js PÅ NÅGOT SÄTT
-  // // Update GH status: inform user auditing has started.
-  // try {
-  //   const status = Object.assign({}, prInfo, GITHUB_PENDING_STATUS);
-  //   await CI.updateGithubStatus(status);
-  // } catch (err) {
-  //   CI.handleError(err, prInfo);
-  // }
+  // Update GH status: inform user auditing has started.
+  try {
+    const status = Object.assign({}, prInfo, GITHUB_PENDING_STATUS);
+    await CI.updateGithubStatus(status);
+  } catch (err) {
+    CI.handleError(err, prInfo);
+  }
 
   // // BEHÖVER INTE KÖRAS, HAR REDAN SCORE I REPORT VARIABELN (så 'lhr' === 'report'?)
   // // Run Lighthouse CI against the PR changes.
