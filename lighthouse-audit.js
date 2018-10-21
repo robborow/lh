@@ -99,30 +99,28 @@ async function lighthouseToGithub() {
   // try {
 
   //   // HANTERA DETTA PÅ NÅTT BRA SÄTT (passa in variabler till 'npm run lighthouse-audit'?)
-  //   // Assign pass/fail to PR if a min score is provided.
-  //   if (Object.keys(config.thresholds).length) {
-  //     await CI.assignPassFailToPR(lhr, config.thresholds, Object.assign({
-  //       target_url: config.testUrl
-  //     }, prInfo));
-  //   } else {
-  //     await CI.updateGithubStatus(Object.assign({
-  //       description: 'Auditing complete. See scores above.',
-  //       state: 'success'
-  //     }, prInfo));
-  //   }
-  // } catch (err) {
-  //   CI.handleError(err, prInfo);
-  // }
+    // Assign pass/fail to PR if a min score is provided.
+    if (Object.keys(config.thresholds).length) {
+      await CI.assignPassFailToPR(lhr, config.thresholds, prInfo);
+    } else {
+      await CI.updateGithubStatus(Object.assign({
+        description: 'Auditing complete. See scores above.',
+        state: 'success'
+      }, prInfo));
+    }
+  } catch (err) {
+    CI.handleError(err, prInfo);
+  }
 
   // ISTÄLLET FÖR DENNA, ANVÄND DESCRIPTION BÄTTRE I GITHUB API: PR STATUSES
-  // // Post comment on issue with updated LH scores.
-  // if (config.addComment) {
-  //   try {
-  //     await CI.postLighthouseComment(prInfo, lhr, config.thresholds);
-  //   } catch (err) {
-  //     res.json('Error posting Lighthouse comment to PR.');
-  //   }
-  // }
+  // Post comment on issue with updated LH scores.
+  if (config.addComment) {
+    try {
+      await CI.postLighthouseComment(prInfo, lhr, config.thresholds);
+    } catch (err) {
+      res.json('Error posting Lighthouse comment to PR.');
+    }
+  }
 
   const scores = LighthouseCI.getOverallScores(lhr);
 
