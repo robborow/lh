@@ -2,9 +2,9 @@
   "name": "lh-test",
   "version": "1.0.0",
   "description": "Lighthouse auditing for Travis CI",
-  "main": "lighthouse-audit.js",
-  "bin": {
-    "lighthouse-audit": "./lighthouse-audit.js"
+  "scripts": {
+    "lh": "lighthouse-audit",
+    "lighthouse-audit": "node ./lighthouse-audit.js"
   },
   "publishConfig": {
     "registry": "https://artifacts.schibsted.io/artifactory/api/npm/npm-virtual/"
@@ -19,7 +19,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@cnp/lighthouse-travis-audit": "^1.0.0",
+    "@cnp/lighthouse-travis-audit": "^1.0.1",
     "@octokit/rest": "^15.15.1"
   }
 }
