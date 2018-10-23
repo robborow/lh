@@ -39,7 +39,7 @@ function getConfig() {
   }
 
   if (enableQualityGateLink === 'true') {
-    config.qualityGateUrl = `https://quality-gate.schibsted.io/#/${process.env.TRAVIS_PULL_REQUEST_SLUG}/${process.env.TRAVIS_BUILD_ID}/reports/11`
+    config.qualityGateUrl = `https://quality-gate.schibsted.io/#/${process.env.TRAVIS_PULL_REQUEST_SLUG}/${process.env.TRAVIS_BUILD_ID}/reports/4`
   }
 
   config.pr = {
