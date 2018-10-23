@@ -1,7 +1,7 @@
 const fs = require('fs');
 const util = require('util');
 const LighthouseCI = require('./lighthouse-ci');
-const CI = new LighthouseCI(process.env.GITHUB_TOKEN);
+const CI = new LighthouseCI(process.env.LIGHTHOUSE_GITHUB_TOKEN);
 
 const pathToReport = 'report.json';
 const allowedTypes = ['performance', 'pwa', 'seo', 'accessibility', 'best-practices'];
@@ -22,13 +22,7 @@ const readFile = util.promisify(fs.readFile);
  */
 function getConfig() {
   const args = process.argv.slice(2);
-  // const argv = minimist(args, {
-  //   boolean: ['comment', 'help'],
-  //   default: {comment: true},
-  //   alias: {help: 'h'}
-  // });
   const config = {};
-  console.log(args)
 
   config.thresholds = {};
   for (var i = 0; i < args.length; i++) {
@@ -44,12 +38,10 @@ function getConfig() {
     config.addComment = true;
   }
 
-  // FLYTTA UT I ENV VAR/CONFA PÅ NÅGOT SÄTT, GÅR DET ATT EXTRAHERA FRÅN "TRAVIS_COMMIt"?
   if (enableQualityGateLink === 'true') {
     config.qualityGateUrl = `https://quality-gate.schibsted.io/#/${process.env.TRAVIS_PULL_REQUEST_SLUG}/${process.env.TRAVIS_BUILD_ID}/reports/11`
   }
 
-  // DESSA SÄTTS AUTOMATISKT AV TRAVIS - FEJKA DETTA FÖR ATT SE ATT DET FUNKAR! (ALT PROVA I robborow/lh)
   config.pr = {
     number: parseInt(process.env.TRAVIS_PULL_REQUEST, 10),
     sha: process.env.TRAVIS_PULL_REQUEST_SHA
@@ -73,6 +65,7 @@ async function lighthouseToGithub() {
   try {
     report = await readFile(pathToReport, 'utf8');
     lhr = JSON.parse(report);
+    console.log(LighthouseCI.getOverallScores(lhr))
   } catch (err) {
     console.log('Error reading Lighthouse report json file')
     console.error(err);
@@ -81,8 +74,6 @@ async function lighthouseToGithub() {
 
   let config = getConfig();
 
-  // // denna info kommer från runlighthouse.js i root, hur får jag det här?
-  // const config = Object.assign({}, req.body);
   const prInfo = {
     repo: config.repo.name,
     owner: config.repo.owner,
@@ -90,9 +81,7 @@ async function lighthouseToGithub() {
     sha: config.pr.sha
   };
 
-  console.log('prInfo', prInfo)
-
-  // // DENNA BORDE EGENTLIGEN KÖRAS I BÖRJAN AV run-lighthouse.js PÅ NÅGOT SÄTT
+  // TODO run this earlier
   // Update GH status: inform user auditing has started.
   try {
     const status = Object.assign({}, prInfo, GITHUB_PENDING_STATUS);
@@ -100,19 +89,6 @@ async function lighthouseToGithub() {
   } catch (err) {
     CI.handleError(err, prInfo);
   }
-
-  // // BEHÖVER INTE KÖRAS, HAR REDAN SCORE I REPORT VARIABELN (så 'lhr' === 'report'?)
-  // // Run Lighthouse CI against the PR changes.
-  // // let lhr;
-  // // try {
-  // //   const headers = {[API_KEY_HEADER]: req.get(API_KEY_HEADER)};
-  // //   lhr = await CI.testOnHeadlessChrome(
-  // //     {output: config.output, url: config.testUrl}, headers);
-  // // } catch (err) {
-  // //   CI.handleError(err, prInfo);
-  // //   res.json(`Error from CI backend. ${err.message}`);
-  // //   return; // Treat a LH error as fatal. Do not proceed.
-  // // }
 
   try {
     // Assign pass/fail to PR if a min score is provided.
@@ -129,7 +105,6 @@ async function lighthouseToGithub() {
     CI.handleError(err, prInfo);
   }
 
-  // ISTÄLLET FÖR DENNA, ANVÄND DESCRIPTION BÄTTRE I GITHUB API: PR STATUSES
   // Post comment on issue with updated LH scores.
   if (config.addComment) {
     try {
@@ -141,15 +116,9 @@ async function lighthouseToGithub() {
     }
   }
 
-  const scores = LighthouseCI.getOverallScores(lhr);
-
-  return scores;
+  return LighthouseCI.getOverallScores(lhr);
 }
 
-// Can't use `await` outside of an async function so you need to chain
-// with then()
 lighthouseToGithub()
-  .then(data => {
-    console.log(data);
-  })
+  .then(data => console.log('Lighthouse score:', data))
   .catch(err => console.log(err))

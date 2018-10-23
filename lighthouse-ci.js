@@ -1,7 +1,3 @@
-
-// LighthouseCI.getOverallScore SKULLE KUNNA HÄMTA JSON FILEN MED DATAT
-
-
 /**
  * Copyright 2017 Google Inc. All rights reserved.
  *
