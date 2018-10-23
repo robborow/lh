@@ -65,7 +65,6 @@ async function lighthouseToGithub() {
   try {
     report = await readFile(pathToReport, 'utf8');
     lhr = JSON.parse(report);
-    console.log(LighthouseCI.getOverallScores(lhr))
   } catch (err) {
     console.log('Error reading Lighthouse report json file')
     console.error(err);
