@@ -20,5 +20,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@octokit/rest": "^15.15.1"
+  },
+  "devDependencies": {
+    "@cnp/lighthouse-travis-audit": "^1.0.7"
   }
 }
