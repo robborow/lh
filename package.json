@@ -1,23 +1,25 @@
 {
   "name": "lh-test",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Lighthouse auditing for Travis CI",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lh": "lighthouse-audit",
     "lighthouse-audit": "node ./lighthouse-audit.js"
+  },
+  "publishConfig": {
+    "registry": "https://artifacts.schibsted.io/artifactory/api/npm/npm-virtual/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robborow/lh.git"
+    "url": "git@github.schibsted.io:smp-distribtuion/lighthouse-travis-audit.git"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/robborow/lh/issues"
+  "author": {
+    "name": "Robert Borowiec",
+    "email": "robert.borowiec@schibsted.com"
   },
-  "homepage": "https://github.com/robborow/lh#readme",
+  "license": "UNLICENSED",
   "dependencies": {
     "@octokit/rest": "^15.15.1"
-  }
+  },
+  "devDependencies": {}
 }
